@@ -4,14 +4,7 @@ const app = Fastify({
 });
 const mssql = require("fastify-mssql");
 const Phone = require("./models/phonemodel");
-
-// app.register(mssql, {
-//   server: "20.235.76.232",
-//   port: 1433,
-//   user: "sa",
-//   password: "Web@Ligo$$$78",
-//   database: "players",
-// });
+const phone_routes = require("./routes/phones");
 
 // Declare a route
 app.get("/", function (request, reply) {
@@ -19,19 +12,20 @@ app.get("/", function (request, reply) {
 });
 
 //for making routes
-async function phone_routes(fastify, options) {
-  fastify.get("/phones", async (request, reply) => {    //it will fetch all the phones in phones table
-    try {
-      const resp = await Phone.findAll();
-      console.log("resp", resp);
-      reply.status(200).send({ data: resp });
-    } catch (error) {
-      console.log("error", error);
-    }
-  });
-}
+// async function phone_routes(fastify, options) {
+//   fastify.get("/phones", async (request, reply) => {    //it will fetch all the phones in phones table
+//     try {
+//       const resp = await Phone.findAll();
+//       console.log("resp", resp);
+//       reply.status(200).send({ data: resp });
+//     } catch (error) {
+//       console.log("error", error);
+//     }
+//   });
+// }
 
-app.register(phone_routes); //for registering routes we have to use this
+// app.register(phone_routes); //1st way : for registering routes we have to use this
+app.register(phone_routes); //2nd Another way of registering routes
 
 // Run the server!
 const start = async () => {

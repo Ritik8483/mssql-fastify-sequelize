@@ -1,4 +1,4 @@
-const { DataTypes } = require("sequelize");
+const { DataTypes, Sequelize } = require("sequelize");
 const MSSQL_DB_CLIENT = require("../db");
 
 const Phone = MSSQL_DB_CLIENT.define("phones", {
@@ -6,6 +6,7 @@ const Phone = MSSQL_DB_CLIENT.define("phones", {
     type: DataTypes.INTEGER,
     // autoIncrement: true,
     primaryKey: true,
+    unique: true,
     allowNull: false,
   },
   // uuid: {
@@ -26,7 +27,16 @@ const Phone = MSSQL_DB_CLIENT.define("phones", {
     type: DataTypes.NUMBER,
     allowNull: true,
   },
+  created_at: {
+    type: DataTypes.DATE,
+    allowNull: true,
+    default: Sequelize.NOW,
+  },
+  updated_at: {
+    type: DataTypes.DATE,
+    allowNull: true,
+    default: Sequelize.NOW,
+  },
 });
-
 
 module.exports = Phone;
