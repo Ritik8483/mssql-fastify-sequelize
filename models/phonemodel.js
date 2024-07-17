@@ -27,16 +27,16 @@ const Phone = MSSQL_DB_CLIENT.define("phones", {
     type: DataTypes.NUMBER,
     allowNull: true,
   },
-  created_at: {
-    type: DataTypes.DATE,
-    allowNull: true,
-    default: Sequelize.NOW,
-  },
-  updated_at: {
-    type: DataTypes.DATE,
-    allowNull: true,
-    default: Sequelize.NOW,
-  },
+  // created_at: {
+  //   type: DataTypes.DATE,
+  //   allowNull: true,
+  //   default: Sequelize.NOW,
+  // },
+  // updated_at: {
+  //   type: DataTypes.DATE,
+  //   allowNull: true,
+  //   default: Sequelize.NOW,
+  // },
 });
 
 module.exports = Phone;

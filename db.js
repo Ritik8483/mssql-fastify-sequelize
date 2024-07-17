@@ -5,6 +5,9 @@ const MSSQL_DB_CLIENT = new Sequelize("players", "sa", "Web@Ligo$$$78", {
   host: "20.235.76.232",
   port: "1433",
   dialect: "mssql",
+  // define: {
+  //   timestamps: true,
+  // },
   pool: {
     max: 10,
     min: 0,
@@ -12,7 +15,7 @@ const MSSQL_DB_CLIENT = new Sequelize("players", "sa", "Web@Ligo$$$78", {
     acquire: 25000,
   },
   dialectOptions: {
-    options: { 
+    options: {
       encrypt: false,
       trustServerCertificate: true,
       requestTimeout: 300000,
@@ -28,11 +31,12 @@ const MSSQL_DB_CLIENT = new Sequelize("players", "sa", "Web@Ligo$$$78", {
 
 module.exports = MSSQL_DB_CLIENT;
 
-//local connection
+// 169.254.211.51
+// local connection
 // const Sequelize = require("sequelize");
 // const MSSQL_DB_CLIENT = new Sequelize("players", "sa", "sa@123", {
 //   host: "localhost",
-//   port: "1433", 
+//   port: "1433",
 //   dialect: "mssql",
 //   pool: {
 //     max: 10,
