@@ -40,18 +40,28 @@
 // start();
 
 const Fastify = require("fastify");
-const app = Fastify({ 
+const app = Fastify({
   logger: false,
 });
 const phone_routes = require("./routes/phones");
 const persons_routes = require("./routes/persons");
 const address_routes = require("./routes/address");
+const customers_routes = require("./routes/customers");
+const orders_routes = require("./routes/orders");
+const students_routes = require("./routes/students");
+const courses_routes = require("./routes/courses");
+const students_courses_routes = require("./routes/student_courses");
 
 // app.register(persons_routes);
 app.register((instance, opts, done) => {
   instance.register(phone_routes);
   instance.register(persons_routes);
   instance.register(address_routes);
+  instance.register(customers_routes);
+  instance.register(orders_routes);
+  instance.register(students_routes);
+  instance.register(courses_routes);
+  instance.register(students_courses_routes);
   done();
 });
 
