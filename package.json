@@ -16,6 +16,8 @@
     "env-cmd": "^10.1.0",
     "fastify": "^4.28.1",
     "fastify-mssql": "^2.0.1",
+    "ioredis": "^5.4.1",
+    "redis": "^4.6.15",
     "sequelize": "^6.37.3",
     "sqlite3": "^5.1.7",
     "uuid": "^10.0.0"

@@ -51,8 +51,11 @@ const orders_routes = require("./routes/orders");
 const students_routes = require("./routes/students");
 const courses_routes = require("./routes/courses");
 const students_courses_routes = require("./routes/student_courses");
+const { createClient } = require("redis"); //redis
+const Redis = require("ioredis"); //ioredis
 
 // app.register(persons_routes);
+
 app.register((instance, opts, done) => {
   instance.register(phone_routes);
   instance.register(persons_routes);
@@ -69,6 +72,18 @@ app.register((instance, opts, done) => {
 const start = async () => {
   try {
     const address = await app.listen({ port: 3000 });
+    //redis
+    // const client = await createClient()
+    //   .on("error", (err) => console.log("Redis Client Error", err))
+    //   .connect();
+    // await client.set("key", "value");
+    // const value = await client.get("key");
+    // console.log("value", value);
+    // await client.disconnect();
+
+    //ioRedis 
+    const redis = new Redis();
+    redis.on("connect", () => console.log("Redis Connected"));
     console.log(`Server is running on ${address}`);
   } catch (err) {
     console.log(`Server is not connected`);
