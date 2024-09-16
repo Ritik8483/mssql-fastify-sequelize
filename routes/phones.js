@@ -1,5 +1,7 @@
 const Redis = require("ioredis");
 const Phone = require("../models/phonemodel");
+const MSSQL_DB_CLIENT = require("../db");
+const { QueryTypes } = require("sequelize");
 
 async function phone_routes(fastify, options) {
   const redis = new Redis();
@@ -15,35 +17,58 @@ async function phone_routes(fastify, options) {
   //   }
   // });
 
+  // fastify.get("/phones", async (request, reply) => {
+  //   //it will fetch all the phones in phones table
+  //   try {
+  //     const isExists = await redis.exists("products");
+  //     console.log("isExists", isExists); //0 or 1
+
+  //     //------to many request--------
+  //     // const clientIp =
+  //     //   request.headers["x-forwarded-for"] || request.socket.remoteAddress;
+  //     // const requestCount = await redis.incr(`${clientIp}:request_count`);
+  //     // const timeRemaining = await redis.ttl("products");
+  //     // if (requestCount > 2) {
+  //     //   return reply.status(429).send({ error: "To many Request" });
+  //     // }
+  //     //------to many request--------
+
+  //     if (isExists) {
+  //       const products = await redis.get("products"); //firstly it doesn't exist
+  //       console.log("products", JSON.parse(products));
+  //       return reply.status(200).send({ data: JSON.parse(products) });
+  //     }
+  //     // const savingInRedis = await redis.set("products", JSON.stringify(resp));    //it reduces api fetching time from 200ms to 9ms
+  //     const resp = await Phone.findAll();
+  //     const savingInRedis = await redis.set("products", JSON.stringify(resp));
+  //     // const savingInRedis = await redis.setex(
+  //     //   "products",
+  //     //   10, //value will be saved for 10s
+  //     //   JSON.stringify(resp) //everything will be saved in string
+  //     // );
+  //     console.log("savingInRedis", savingInRedis); //ok
+  //     reply.status(200).send({ data: resp });
+  //   } catch (error) {
+  //     console.log("error", error);
+  //   }
+  // });
+
   fastify.get("/phones", async (request, reply) => {
     //it will fetch all the phones in phones table
     try {
-      const isExists = await redis.exists("products");
-      console.log("isExists", isExists); //0 or 1
-
-      //------to many request--------
-      const clientIp =
-        request.headers["x-forwarded-for"] || request.socket.remoteAddress;
-      const requestCount = await redis.incr(`${clientIp}:request_count`);
-      const timeRemaining = await redis.ttl("products");
-      if (requestCount > 2) {
-        return reply.status(429).send({ error: "To many Request" });
-      }
-      //------to many request--------
-
-      if (isExists) {
-        const products = await redis.get("products"); //firstly it doesn't exist
-        console.log("products", JSON.parse(products));
-        return reply.status(200).send({ data: JSON.parse(products) });
-      }
-      // const savingInRedis = await redis.set("products", JSON.stringify(resp));    //it reduces api fetching time from 200ms to 9ms
-      const resp = await Phone.findAll();
-      const savingInRedis = await redis.setex(
-        "products",
-        10, //value will be saved for 10s
-        JSON.stringify(resp) //everything will be saved in string
+      const resp = await MSSQL_DB_CLIENT.query(
+        `
+      SELECT [id] 
+      ,[phone_name]
+      ,[phone_description]
+      ,[price]
+      FROM [player].[dbo].[phones]
+      `,
+        {
+          type: QueryTypes.SELECT,    //to avoid count
+        }
       );
-      console.log("savingInRedis", savingInRedis); //ok
+      console.log("resp", resp);
       reply.status(200).send({ data: resp });
     } catch (error) {
       console.log("error", error);
@@ -84,6 +109,8 @@ async function phone_routes(fastify, options) {
 
   fastify.post("/phones", async (request, reply) => {
     try {
+      console.log("request.body", request.body);
+
       const resp = await Phone.create(request.body);
       console.log("resp", resp);
       reply.status(200).send(resp.toJSON());
